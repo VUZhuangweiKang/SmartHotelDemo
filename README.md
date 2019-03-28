@@ -1,2 +1,5 @@
 # Marriott-Lecture
-Marriott Lecture Repo
+
+## System Architecture
+
+![System Architecture](./images/ArchitectureDesign.png)
