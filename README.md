@@ -2,4 +2,4 @@
 
 ## System Architecture
 
-![System Architecture](./images/ArchitectureDesign.png)
+![System Architecture](./images/ArchitectureDesign.PNG)
