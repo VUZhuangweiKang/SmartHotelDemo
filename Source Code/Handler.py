@@ -26,7 +26,7 @@
 #
 
 import boto3
-import time
+import json
 import requests
 from paho.mqtt.client import Client
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -36,19 +36,7 @@ from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
-
-
-SKILL = 'Customer Order'
-MANAGER_RSP_TOPIC = 'CustomerOrderRsp'
-HELP_TEXT = ""
-
-MQTT_ADDR = ''
-MQTT_PRT = 1883
-
-HTTP_HEADER = {}
-HTTP_CRT = ''
-
-MANAGER_ADDR = ''
+from GlobalConstants import *
 
 
 def parse_request(handler_input):
@@ -74,7 +62,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
     def on_message(self, client, userdata, message):
         self.response = message.payload
 
-    def mqtt_listener(self):
+    def mqtt_listener(self, room):
         Client.connected_flag = False
         client = Client()
 
@@ -89,7 +77,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         client.loop()
         while not Client.connected_flag:  # wait in loop
             print("In wait loop")
-        client.subscribe(topic=MANAGER_RSP_TOPIC)
+        client.subscribe(topic='%s/%s' % (MANAGER_RSP_TOPIC, room))
         client.connect(host=MQTT_ADDR, port=MQTT_PRT)
         while not self.got_response:
             pass
@@ -105,7 +93,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         # DynamoDB client
         client = boto3.resource('dynamodb')
         # get customer order table
-        table = client.Table('Customer_Order')
+        table = client.Table(DB_TABLE)
 
         # get slots values
         request_dict = parse_request(handler_input)
@@ -116,12 +104,10 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         table.put_item(item=request_dict)
 
         # send request to Manager using Flask
-        requests.post(url=MANAGER_ADDR, json=requests, headers=HTTP_HEADER, verify=HTTP_CRT)
-
-        time.sleep(0.2)
+        requests.post(url='%s/customer_order' % MANAGER_ADDR, json=json.dumps(requests), headers=HTTP_HEADER, verify=HTTP_CRT)
 
         # listen response from Manager using MQTT
-        speech_text = self.mqtt_listener()
+        speech_text = self.mqtt_listener(request_dict['room'])
 
         # set simple card for this request
         handler_input.response_builder.speak(speech_text).set_card(
