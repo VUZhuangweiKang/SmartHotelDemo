@@ -12,7 +12,7 @@
 #   The scenario is pizza ordering through Alexa Echo
 #   Communication Manner:
 #       1. MQTT(Lambda listens responses from Manager): tcp://*.*.*.*:1883
-#       2. Flask(Manager listens requests from Lambda): https://*.*.*.*:6000
+#       2. Flask(Manager listens requests from Lambda): https://*.*.*.*:5000
 #   Communication Security Issue:
 #       1. MQTT: using public MQTT server
 #       2. Flask: using http instead of https, no http header encryption
