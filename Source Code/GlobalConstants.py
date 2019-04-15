@@ -18,6 +18,13 @@ HTTP_CRT = ''
 MANAGER_ADDR = ''
 MANAGER_PRT = 5000
 
+USERNAME = ''
+PASSWORD = ''
+
+TLS_CERT = ''
+
+MESSAGE_DECRYPT_KEY = ''
+
 # ##############################
 # DynamoDB Constants
 DB_TABLE = 'Customer_Order'
