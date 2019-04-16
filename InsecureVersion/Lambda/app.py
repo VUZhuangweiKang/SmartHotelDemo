@@ -100,7 +100,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         table.put_item(item=request_dict)
 
         # send request to Manager using Flask
-        requests.post(url='%s/customer_order' % MANAGER_ADDR, json=json.dumps(requests), headers=HTTP_HEADER, verify=HTTP_CRT)
+        requests.post(url='%s/customer_order' % MANAGER_ADDR, json=json.dumps(requests))
 
         # listen response from Manager using MQTT
         speech_text = self.mqtt_listener(request_dict['room'])
