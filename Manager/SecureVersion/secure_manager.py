@@ -24,9 +24,8 @@ import json
 from paho.mqtt.client import Client
 from flask import Flask, request
 from GlobalConstants import *
-from MessageSecure import *
-from FlaskSSLSecure import *
-
+from .MessageSecure import *
+from .FlaskSSLSecure import *
 
 # The boto3 dynamoDB resource
 dynamodb_resource = boto3.resource('dynamodb')
