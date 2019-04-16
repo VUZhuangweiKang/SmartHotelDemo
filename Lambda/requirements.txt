@@ -1,5 +1,0 @@
-requests
-boto3
-ask-sdk-core
-Flask
-phao-mqtt

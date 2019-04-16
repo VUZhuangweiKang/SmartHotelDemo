@@ -22,9 +22,9 @@ import time
 import datetime
 import json
 from paho.mqtt.client import Client
-from flask import Flask, request
+from flask import Flask
 from GlobalConstants import *
-from .MessageSecure import *
+from MessageSecure import *
 from .FlaskSSLSecure import *
 
 # The boto3 dynamoDB resource

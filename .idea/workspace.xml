@@ -2,18 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f9bea65-966a-4b5e-902b-45173af88ed1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Manager/InsecureVersion/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Manager/SecureVersion/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SecureVersion/GlobalConstants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/MarriottDev.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MarriottDev.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/FlaskSSLSecure.py" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/SecureVersion/FlaskSSLSecure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/MessageSecure.py" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/SecureVersion/MessageSecure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/api.key" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/SecureVersion/api.key" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/insecure_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/InsecureVersion/insecure_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/secure_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/SecureVersion/secure_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/server.crt" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/SecureVersion/server.crt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manager/server.key" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/SecureVersion/server.key" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GlobalConstants.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lambda/InsecureVersion/app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lambda/SecureVersion/app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lambda/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lambda/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/InsecureVersion/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/InsecureVersion/insecure_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/SecureVersion/FlaskSSLSecure.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/SecureVersion/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/SecureVersion/api.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/SecureVersion/secure_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/SecureVersion/server.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/SecureVersion/server.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manager/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MessageSecure.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/template.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/InsecureVersion/Lambda/template.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/unit/test_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/test_handler.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,13 +32,22 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Manager/SecureVersion/secure_manager.py">
+        <entry file="file://$PROJECT_DIR$/SecureVersion/Lambda/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="442">
+              <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
               <folding>
-                <element signature="e#779#791#0" expanded="true" />
+                <element signature="e#983#995#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SecureVersion/GlobalConstants.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -62,6 +79,10 @@
         <option value="$PROJECT_DIR$/Manager/FlaskSSLSecure.py" />
         <option value="$PROJECT_DIR$/Manager/MessageSecure.py" />
         <option value="$PROJECT_DIR$/Manager/SecureVersion/secure_manager.py" />
+        <option value="$PROJECT_DIR$/tests/unit/test_handler.py" />
+        <option value="$PROJECT_DIR$/Lambda/InsecureVersion/app.py" />
+        <option value="$PROJECT_DIR$/Lambda/SecureVersion/app.py" />
+        <option value="$PROJECT_DIR$/Lambda/InsecureVersion/insecure.yaml" />
       </list>
     </option>
   </component>
@@ -87,24 +108,7 @@
             <path>
               <item name="MarriottDev" type="b2602c69:ProjectViewProjectNode" />
               <item name="MarriottDev" type="462c0819:PsiDirectoryNode" />
-              <item name="Lambda" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MarriottDev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MarriottDev" type="462c0819:PsiDirectoryNode" />
-              <item name="Manager" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MarriottDev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MarriottDev" type="462c0819:PsiDirectoryNode" />
-              <item name="Manager" type="462c0819:PsiDirectoryNode" />
               <item name="InsecureVersion" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MarriottDev" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MarriottDev" type="462c0819:PsiDirectoryNode" />
-              <item name="Manager" type="462c0819:PsiDirectoryNode" />
-              <item name="SecureVersion" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -115,12 +119,22 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/SecureVersion" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev\SecureVersion" />
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev\InsecureVersion\Lambda" />
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev\Lambda\SecureVersion" />
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev\Lambda\InsecureVersion" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev" />
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev\Lambda\InsecureVersion" />
+      <recent name="C:\Users\kangz1\Desktop\MarriottDev\Lambda\SecureVersion" />
       <recent name="C:\Users\kangz1\Desktop\MarriottDev\Manager\InsecureVersion" />
       <recent name="C:\Users\kangz1\Desktop\MarriottDev\Manager\SecureVersion" />
     </key>
@@ -137,6 +151,47 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="AWS Lambda.[Remote] Marriott">
+    <configuration name="insecure_handler" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="MarriottDev" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lambda" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\kangz1\Desktop\MarriottDev\Lambda\InsecureVersion\app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="[Remote] Marriott" type="aws.lambda" factoryName="Remote" temporary="true" nameIsGenerated="true">
+      <option name="credentialProviderId" value="profile:default" />
+      <option name="regionId" value="us-west-2" />
+      <option name="functionName" value="Marriott" />
+      <option name="input" value="{&#10;  &quot;body&quot;: &quot;{\&quot;test\&quot;:\&quot;body\&quot;}&quot;,&#10;  &quot;resource&quot;: &quot;/{proxy+}&quot;,&#10;  &quot;path&quot;: &quot;/path/to/resource&quot;,&#10;  &quot;httpMethod&quot;: &quot;POST&quot;,&#10;  &quot;queryStringParameters&quot;: {&#10;    &quot;foo&quot;: &quot;bar&quot;&#10;  },&#10;  &quot;pathParameters&quot;: {&#10;    &quot;proxy&quot;: &quot;path/to/resource&quot;&#10;  },&#10;  &quot;stageVariables&quot;: {&#10;    &quot;baz&quot;: &quot;qux&quot;&#10;  },&#10;  &quot;headers&quot;: {&#10;    &quot;Accept&quot;: &quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&quot;,&#10;    &quot;Accept-Encoding&quot;: &quot;gzip, deflate, sdch&quot;,&#10;    &quot;Accept-Language&quot;: &quot;en-US,en;q=0.8&quot;,&#10;    &quot;Cache-Control&quot;: &quot;max-age=0&quot;,&#10;    &quot;CloudFront-Forwarded-Proto&quot;: &quot;https&quot;,&#10;    &quot;CloudFront-Is-Desktop-Viewer&quot;: &quot;true&quot;,&#10;    &quot;CloudFront-Is-Mobile-Viewer&quot;: &quot;false&quot;,&#10;    &quot;CloudFront-Is-SmartTV-Viewer&quot;: &quot;false&quot;,&#10;    &quot;CloudFront-Is-Tablet-Viewer&quot;: &quot;false&quot;,&#10;    &quot;CloudFront-Viewer-Country&quot;: &quot;US&quot;,&#10;    &quot;Host&quot;: &quot;1234567890.execute-api.{dns_suffix}&quot;,&#10;    &quot;Upgrade-Insecure-Requests&quot;: &quot;1&quot;,&#10;    &quot;User-Agent&quot;: &quot;Custom User Agent String&quot;,&#10;    &quot;Via&quot;: &quot;1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)&quot;,&#10;    &quot;X-Amz-Cf-Id&quot;: &quot;cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA==&quot;,&#10;    &quot;X-Forwarded-For&quot;: &quot;127.0.0.1, 127.0.0.2&quot;,&#10;    &quot;X-Forwarded-Port&quot;: &quot;443&quot;,&#10;    &quot;X-Forwarded-Proto&quot;: &quot;https&quot;&#10;  },&#10;  &quot;requestContext&quot;: {&#10;    &quot;accountId&quot;: &quot;123456789012&quot;,&#10;    &quot;resourceId&quot;: &quot;123456&quot;,&#10;    &quot;stage&quot;: &quot;prod&quot;,&#10;    &quot;requestId&quot;: &quot;c6af9ac6-7b61-11e6-9a41-93e8deadbeef&quot;,&#10;    &quot;identity&quot;: {&#10;      &quot;cognitoIdentityPoolId&quot;: null,&#10;      &quot;accountId&quot;: null,&#10;      &quot;cognitoIdentityId&quot;: null,&#10;      &quot;caller&quot;: null,&#10;      &quot;apiKey&quot;: null,&#10;      &quot;sourceIp&quot;: &quot;127.0.0.1&quot;,&#10;      &quot;cognitoAuthenticationType&quot;: null,&#10;      &quot;cognitoAuthenticationProvider&quot;: null,&#10;      &quot;userArn&quot;: null,&#10;      &quot;userAgent&quot;: &quot;Custom User Agent String&quot;,&#10;      &quot;user&quot;: null&#10;    },&#10;    &quot;resourcePath&quot;: &quot;/{proxy+}&quot;,&#10;    &quot;httpMethod&quot;: &quot;POST&quot;,&#10;    &quot;apiId&quot;: &quot;1234567890&quot;&#10;  }&#10;}" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="AWS Lambda.[Remote] Marriott" />
+      <item itemvalue="Python.insecure_handler" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="AWS Lambda.[Remote] Marriott" />
+        <item itemvalue="Python.insecure_handler" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -148,12 +203,20 @@
       <option name="presentableId" value="Default" />
       <updated>1555435839653</updated>
       <workItem from="1555435862950" duration="1391000" />
-      <workItem from="1555437634188" duration="1024000" />
+      <workItem from="1555437634188" duration="7193000" />
     </task>
+    <task id="LOCAL-00001" summary="update structure">
+      <created>1555439234656</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1555439234656</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2415000" />
+    <option name="totallyTimeSpent" value="8584000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
@@ -165,7 +228,7 @@
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32981783" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32981783" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -186,6 +249,13 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="update structure" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/MarriottDev$insecure_handler.coverage" NAME="insecure_handler Coverage Results" MODIFIED="1555440322505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lambda" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/.aws/config">
       <provider selected="true" editor-type-id="text-editor">
@@ -194,23 +264,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/template.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Lambda/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Lambda/secure_handler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2890">
-          <caret line="170" column="36" lean-forward="true" selection-start-line="170" selection-start-column="36" selection-end-line="170" selection-end-column="36" />
-          <folding>
-            <element signature="e#983#995#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -224,17 +281,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Lambda/insecure_handler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="29" lean-forward="true" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
-          <folding>
-            <element signature="e#976#988#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Manager/SecureVersion/MessageSecure.py">
+    <entry file="file://$PROJECT_DIR$/MessageSecure.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
           <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
@@ -263,10 +310,107 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Manager/SecureVersion/secure_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="179">
+          <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Lambda/SecureVersion/secure.yaml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/template.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="8" lean-forward="true" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/unit/test_handler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1173">
+          <caret line="69" column="35" selection-start-line="69" selection-start-column="35" selection-end-line="69" selection-end-column="35" />
           <folding>
-            <element signature="e#779#791#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Lambda/InsecureVersion/insecure.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="38" lean-forward="true" selection-start-column="38" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Lambda/InsecureVersion/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2924">
+          <caret line="172" lean-forward="true" selection-start-line="172" selection-end-line="172" />
+          <folding>
+            <element signature="e#976#988#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Lambda/SecureVersion/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-416">
+          <caret line="88" column="56" lean-forward="true" selection-start-line="88" selection-start-column="56" selection-end-line="88" selection-end-column="56" />
+          <folding>
+            <element signature="e#983#995#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SecureVersion/MessageSecure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/InsecureVersion/Lambda/insecure.yaml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/event.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="16" lean-forward="true" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/InsecureVersion/Lambda/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="1" lean-forward="true" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
+          <folding>
+            <element signature="e#976#988#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SecureVersion/GlobalConstants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/InsecureVersion/Lambda/template.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SecureVersion/Lambda/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+          <folding>
+            <element signature="e#983#995#0" expanded="true" />
           </folding>
         </state>
       </provider>
