@@ -9,10 +9,10 @@ MANAGER_RSP_TOPIC = 'CustomerOrderRsp'
 
 # ##############################
 # Communication Layer Constants
-MQTT_ADDR = 'ec2-34-209-251-213.us-west-2.compute.amazonaws.com'
+MQTT_ADDR = '54.245.219.103'
 MQTT_PRT = 1883
 
-MANAGER_ADDR = 'ec2-34-209-251-213.us-west-2.compute.amazonaws.com'
+MANAGER_ADDR = '54.245.219.103'
 MANAGER_PRT = 5000
 
 # ##############################

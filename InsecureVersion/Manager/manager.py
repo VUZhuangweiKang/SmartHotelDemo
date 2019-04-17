@@ -27,7 +27,7 @@ from GlobalConstants import *
 
 # The boto3 dynamoDB resource
 dynamodb_resource = boto3.resource('dynamodb')
-db_client = boto3.client()
+db_client = boto3.client(service_name='dynamodb')
 
 mqtt_client = None
 app = Flask(__name__)
@@ -49,9 +49,9 @@ def print_receipt(body):
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        Client.connected_flag = True
+        mqtt_client.connected_flag = True
     else:
-        Client.connected_flag = False
+        mqtt_client.connected_flag = False
 
 
 def mqtt_responder():
@@ -59,10 +59,11 @@ def mqtt_responder():
     Client.connected_flag = False
     mqtt_client = Client()
     mqtt_client.on_connect = on_connect
-    mqtt_client.loop()
-    while not Client.connected_flag:  # wait in loop
-        print("In wait loop")
+    mqtt_client.loop_start()
     mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
+    while not mqtt_client.connected_flag:  # wait in loop
+        print("In wait loop")
+        time.sleep(1)
     mqtt_client.loop_forever()
     mqtt_client.disconnect()
 

@@ -51,12 +51,12 @@ def print_receipt(body):
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        Client.connected_flag = True
+        mqtt_client.connected_flag = True
     elif rc == 5:
         print('Connection Rejected')
-        Client.connected_flag = False
+        mqtt_client.connected_flag = False
     else:
-        Client.connected_flag = False
+        mqtt_client.connected_flag = False
 
 
 def mqtt_responder():
@@ -71,9 +71,9 @@ def mqtt_responder():
 
     mqtt_client.on_connect = on_connect
     mqtt_client.loop()
-    while not Client.connected_flag:  # wait in loop
-        print("In wait loop")
     mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
+    while not mqtt_client.connected_flag:  # wait in loop
+        print("In wait loop")
     mqtt_client.loop_forever()
     mqtt_client.disconnect()
 
