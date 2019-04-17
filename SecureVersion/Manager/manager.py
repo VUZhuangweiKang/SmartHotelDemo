@@ -29,7 +29,6 @@ from .FlaskSSLSecure import *
 
 # The boto3 dynamoDB resource
 dynamodb_resource = boto3.resource('dynamodb')
-db_client = boto3.client()
 
 mqtt_client = None
 app = Flask(__name__)
@@ -38,12 +37,13 @@ app = Flask(__name__)
 def print_receipt(body):
     receipt = 'Customer Receipt\n' \
               'Room: %s\n' \
-              'Item: %s\n' \
+              'Food: %s\n' \
               'Size: %s\n' \
-              'Price: $10' \
+              'Price: %s\n' \
               'Ordered Time: %s' % (body['room'],
-                                    body['foods'],
+                                    body['food'],
                                     body['size'],
+                                    body['price'],
                                     str(datetime.datetime.now()))
     print(receipt)
     return receipt
@@ -90,6 +90,16 @@ def handler():
 
     # update order status
     json_body['order status'] = 'ordered'
+
+    price_table = dynamodb_resource.Table(PRICE_TABLE)
+
+    json_body['price'] = price_table.get_item(
+        Keys={
+            'food': json_body['food'],
+            'size': json_body['size']
+        }
+    )
+
     table.put_item(Item=json_body)
 
     time.sleep(0.3)
