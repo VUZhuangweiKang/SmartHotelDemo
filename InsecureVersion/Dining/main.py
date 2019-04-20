@@ -44,5 +44,3 @@ mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
 while not mqtt_client.connected_flag:  # wait in loop
     print("In wait loop")
 mqtt_client.subscribe(topic='%s/*' % FD_TOPIC, qos=1)
-mqtt_client.loop_forever()
-mqtt_client.disconnect()
