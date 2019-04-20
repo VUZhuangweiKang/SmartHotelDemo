@@ -56,10 +56,8 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         return is_intent_name("CustomerOrder")(handler_input)
 
     def handle(self, handler_input):
-        global got_response
         # get slots values
         request_dict = self.parse_request(handler_input)
-        print(request_dict)
         # add order status (key, value) pair
         request_dict.update({'Order Status': 'pending'})
 
@@ -75,8 +73,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         response = requests.post(url='http://%s:%s/customer_order' %
                                  (MANAGER_ADDR, MANAGER_PRT), json=request_dict)
 
-        speech_text = response
-        print(speech_text)
+        speech_text = response.text
 
         # set simple card for this request
         handler_input.response_builder.speak(speech_text).set_card(

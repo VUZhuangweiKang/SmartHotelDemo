@@ -28,7 +28,6 @@
 import boto3
 import json
 import requests
-from paho.mqtt.client import Client
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
@@ -40,87 +39,44 @@ from GlobalConstants import *
 from MessageSecure import *
 
 
-def parse_request(handler_input):
-    """
-    :param handler_input:
-    :return: a request dict {intent_name: intent_value}
-    """
-    slots = handler_input.request_envelope.request.intent.slots
-    request_dict = {}
-    for slot in slots.values():
-        request_dict.update({slot.name: slot.value})
-    return request_dict
-
-
 # Customer order processing logic
 class CustomerOrderIntentHandler(AbstractRequestHandler):
-    got_response = False
-    response = None
+    def parse_request(self, handler_input):
+        """
+        :param handler_input:
+        :return: a request dict {intent_name: intent_value}
+        """
+        slots = handler_input.request_envelope.request.intent.slots
+        request_dict = {}
+        for slot in slots.values():
+            request_dict.update({slot.name: slot.value})
+        return request_dict
 
     def can_handle(self, handler_input):
         return is_intent_name("CustomerOrder")(handler_input)
 
-    def on_message(self, client, userdata, message):
-        decrypt_payload = decrypt(key=MESSAGE_DECRYPT_KEY, data=message.payload)
-        self.response = decrypt_payload
-
-    def mqtt_listener(self, room):
-        Client.connected_flag = False
-        client = Client()
-
-        def on_connect(client, userdata, flags, rc):
-            if rc == 0:
-                Client.connected_flag = True
-            elif rc == 5:
-                print('Connection Denied')
-                Client.connected_flag = False
-            else:
-                Client.connected_flag = False
-
-        # set mosquitto broker password and username
-        client.username_pw_set(username=USERNAME, password=PASSWORD)
-        # set TLS cert for the client
-        client.tls_set(ca_certs=TLS_CERT)
-
-        client.on_connect = on_connect
-        client.on_message = self.on_message
-        client.loop()
-
-        while not Client.connected_flag:  # wait in loop
-            print("In wait loop")
-        client.subscribe(topic='%s/%s' % (MANAGER_RSP_TOPIC, room))
-        client.connect(host=MQTT_ADDR, port=MQTT_PRT)
-        while not self.got_response:
-            pass
-
-        client.loop_stop(force=True)
-        client.disconnect()
-        return self.response
-
     def handle(self, handler_input):
-        # DynamoDB client
-        client = boto3.resource('dynamodb')
-        # get customer order table
-        table = client.Table(DB_TABLE)
-
         # get slots values
         request_dict = parse_request(handler_input)
         # add order status (key, value) pair
         request_dict.update({'order status': 'pending'})
 
-        # for debugging
-        print(request_dict)
+        # DynamoDB client
+        client = boto3.resource('dynamodb')
+        # get customer order table
+        table = client.Table(DB_TABLE)
 
         # store data into DynamoDB
         table.put_item(item=request_dict)
 
         # send request to Manager using Flask
-        encrypt_msg = cipher(key=MESSAGE_DECRYPT_KEY, data=json.dumps(requests))
+        encrypt_msg = cipher(key=MESSAGE_DECRYPT_KEY,
+                             data=json.dumps(request_dict))
 
-        requests.post(url='%s:%s/customer_order' % (MANAGER_ADDR, MANAGER_PRT), data=encrypt_msg, headers=HTTP_HEADER, verify=HTTP_CRT)
+        response = requests.post(url='http://%s:%s/customer_order' %
+                                 (MANAGER_ADDR, MANAGER_PRT), data=encrypt_msg)
 
-        # listen response from Manager using MQTT
-        speech_text = self.mqtt_listener(request_dict['room'])
+        speech_text = response.text
 
         # set simple card for this request
         handler_input.response_builder.speak(speech_text).set_card(
