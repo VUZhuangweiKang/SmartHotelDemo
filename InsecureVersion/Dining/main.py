@@ -33,6 +33,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, message):
     print('Recived Order: %s '% message.payload)
+    client.publish(topic=ORDER_STATUS, payload='Foods is preparing')
 
 
 Client.connected_flag = False

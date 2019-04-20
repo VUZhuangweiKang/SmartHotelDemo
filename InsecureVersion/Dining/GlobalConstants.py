@@ -6,6 +6,7 @@ HELP_TEXT = "This is the help text."
 # ##############################
 # AWS Lambda related constants
 FD_TOPIC = 'CustomerOrder'
+ORDER_STATUS = 'OrderStatus'
 
 # ##############################
 # Communication Layer Constants
