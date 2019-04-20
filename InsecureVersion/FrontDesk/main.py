@@ -91,6 +91,7 @@ def mqtt_handler():
     Client.connected_flag = False
     mqtt_client = Client()
     mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = on_message
     mqtt_client.loop_start()
     mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
     while not mqtt_client.connected_flag:  # wait in loop
@@ -124,7 +125,7 @@ def handler():
     # respond Lambda using MQTT
     mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=receipt)
     while not order_status_flag:
-        pass
+        time.sleep(1)
     order_status_flag = False
     return order_status, 200
 
