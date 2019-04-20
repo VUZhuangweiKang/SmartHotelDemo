@@ -31,6 +31,7 @@ from GlobalConstants import *
 dynamodb_resource = boto3.resource('dynamodb', region_name=REGION)
 
 mqtt_client = None
+order_status_flag = False
 order_status = None
 app = Flask(__name__)
 
@@ -81,6 +82,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, message):
     global order_status
+    order_status_flag = True
     order_status = message.payload
 
 
@@ -120,9 +122,9 @@ def handler():
 
     # respond Lambda using MQTT
     mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=receipt)
-    while order_status is None:
+    while not order_status_flag:
         pass
-
+    order_status_flag = False
     return order_status, 200
 
 
