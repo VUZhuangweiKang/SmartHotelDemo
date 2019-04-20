@@ -97,7 +97,7 @@ def mqtt_handler():
     while not mqtt_client.connected_flag:  # wait in loop
         print("In wait loop")
         time.sleep(1)
-    mqtt_client.subscribe(topic='%s/*' % ORDER_STATUS, qos=1)
+    mqtt_client.subscribe(topic='%s/*' % ORDER_STATUS)
     mqtt_client.loop_forever()
     mqtt_client.disconnect()
 
