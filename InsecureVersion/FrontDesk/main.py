@@ -81,7 +81,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    global order_status
+    global order_status, order_status_flag
     order_status_flag = True
     order_status = message.payload
 
@@ -103,6 +103,7 @@ def mqtt_handler():
 
 @app.route('/customer_order', methods=['POST'])
 def handler():
+    global order_status_flag
     json_body = request.get_json()
     
     # use table
