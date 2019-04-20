@@ -18,7 +18,6 @@
 #
 
 import time
-import json
 from paho.mqtt.client import Client
 from GlobalConstants import *
 
@@ -35,8 +34,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    data = json.loads(message.payload)
-    print(data)
+    print(payload)
     client.publish(topic='%s/%s' % (ORDER_STATUS, message.topic.split('/')[1]), payload='Foods is preparing')
 
 

@@ -20,6 +20,7 @@
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import time
+import json
 import datetime
 from threading import Thread
 from paho.mqtt.client import Client
@@ -125,7 +126,7 @@ def handler():
     receipt = print_receipt(json_body)
 
     # respond Lambda using MQTT
-    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=json.dumps(json_body))
+    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=receipt)
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False
