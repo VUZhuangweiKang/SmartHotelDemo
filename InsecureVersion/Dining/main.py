@@ -24,20 +24,19 @@ from flask import Flask, request
 from GlobalConstants import *
 
 
+Client.connected_flag = False
+mqtt_client = Client()
+
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        client.connected_flag = True
+        mqtt_client.connected_flag = True
     else:
-        client.connected_flag = False
-
+        mqtt_client.connected_flag = False
 
 def on_message(client, userdata, message):
     print('Recived Order: %s '% message.payload)
     client.publish(topic=ORDER_STATUS, payload='Foods is preparing')
 
-
-Client.connected_flag = False
-mqtt_client = Client()
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 mqtt_client.loop_start()
