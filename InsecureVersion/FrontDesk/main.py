@@ -59,6 +59,7 @@ def init_price_table():
         price_table.put_item(Item=itemm)
 
 def print_receipt(body):
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     receipt = 'Customer Receipt\n' \
               'Room: %s\n' \
               'Food: %s\n' \
@@ -70,6 +71,7 @@ def print_receipt(body):
                                     body['Price'],
                                     str(datetime.datetime.now()))
     print(receipt)
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     return receipt
 
 
@@ -123,10 +125,13 @@ def handler():
     receipt = print_receipt(json_body)
 
     # respond Lambda using MQTT
-    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=receipt)
+    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=json.dumps(json_body))
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False
+    
+    print('Order Status:', order_status)
+
     return order_status, 200
 
 

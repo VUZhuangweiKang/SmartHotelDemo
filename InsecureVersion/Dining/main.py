@@ -35,7 +35,8 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    print('Recived Order: %s ' % message.payload)
+    data = json.loads(message.payload)
+    print(data)
     client.publish(topic='%s/%s' % (ORDER_STATUS, message.topic.split('/')[1]), payload='Foods is preparing')
 
 

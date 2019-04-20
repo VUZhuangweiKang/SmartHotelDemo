@@ -56,9 +56,10 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         return is_intent_name("CustomerOrder")(handler_input)
 
     def handle(self, handler_input):
+        global got_response
         # get slots values
         request_dict = self.parse_request(handler_input)
-
+        print(request_dict)
         # add order status (key, value) pair
         request_dict.update({'Order Status': 'pending'})
 
@@ -75,6 +76,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
                                  (MANAGER_ADDR, MANAGER_PRT), json=request_dict)
 
         speech_text = response
+        print(speech_text)
 
         # set simple card for this request
         handler_input.response_builder.speak(speech_text).set_card(
@@ -140,13 +142,12 @@ class AllExceptionHandler(AbstractExceptionHandler):
         return handler_input.response_builder.response
 
 
-def lambda_handler(event, context):
-    sb = SkillBuilder()
-    sb.add_request_handler(LaunchRequestHandler())
-    sb.add_request_handler(CustomerOrderIntentHandler())
-    sb.add_request_handler(HelpIntentHandler())
-    sb.add_request_handler(CancelAndStopIntentHandler())
-    sb.add_request_handler(SessionEndedRequestHandler())
-    sb.add_exception_handler(AllExceptionHandler())
+sb = SkillBuilder()
+sb.add_request_handler(LaunchRequestHandler())
+sb.add_request_handler(CustomerOrderIntentHandler())
+sb.add_request_handler(HelpIntentHandler())
+sb.add_request_handler(CancelAndStopIntentHandler())
+sb.add_request_handler(SessionEndedRequestHandler())
+sb.add_exception_handler(AllExceptionHandler())
 
-    sb.lambda_handler()
+handler = sb.lambda_handler()
