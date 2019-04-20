@@ -123,7 +123,7 @@ def handler():
     receipt = print_receipt(json_body)
 
     # respond Lambda using MQTT
-    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=receipt)
+    mqtt_client.publish(topic='%s' % FD_TOPIC, payload=receipt)
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False
