@@ -25,10 +25,10 @@
 #
 #
 
+
 import boto3
 import json
 import requests
-from paho.mqtt.client import Client
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
@@ -39,71 +39,43 @@ from ask_sdk_model.ui import SimpleCard
 from GlobalConstants import *
 
 
-def parse_request(handler_input):
-    """
-    :param handler_input:
-    :return: a request dict {intent_name: intent_value}
-    """
-    slots = handler_input.request_envelope.request.intent.slots
-    request_dict = {}
-    for slot in slots.values():
-        request_dict.update({slot.name: slot.value})
-    return request_dict
-
-
 # Customer order processing logic
 class CustomerOrderIntentHandler(AbstractRequestHandler):
-    got_response = False
-    response = None
+    def parse_request(self, handler_input):
+        """
+        :param handler_input:
+        :return: a request dict {intent_name: intent_value}
+        """
+        slots = handler_input.request_envelope.request.intent.slots
+        request_dict = {}
+        for slot in slots.values():
+            request_dict.update({slot.name: slot.value})
+        return request_dict
 
     def can_handle(self, handler_input):
         return is_intent_name("CustomerOrder")(handler_input)
 
-    def on_message(self, client, userdata, message):
-        self.response = message.payload
-
-    def mqtt_listener(self, room):
-        Client.connected_flag = False
-        client = Client()
-
-        def on_connect(client, userdata, flags, rc):
-            if rc == 0:
-                Client.connected_flag = True
-            else:
-                Client.connected_flag = False
-
-        client.on_connect = on_connect
-        client.on_message = self.on_message
-        client.loop()
-        while not Client.connected_flag:  # wait in loop
-            print("In wait loop")
-        client.subscribe(topic='%s/%s' % (MANAGER_RSP_TOPIC, room))
-        client.connect(host=MQTT_ADDR, port=MQTT_PRT)
-        while not self.got_response:
-            pass
-        client.loop_stop(force=True)
-        client.disconnect()
-        return self.response
-
     def handle(self, handler_input):
-        # DynamoDB client
-        client = boto3.resource('dynamodb')
-        # get customer order table
-        table = client.Table(DB_TABLE)
-
+        global got_response
         # get slots values
-        request_dict = parse_request(handler_input)
+        request_dict = self.parse_request(handler_input)
+
         # add order status (key, value) pair
-        request_dict.update({'order status': 'pending'})
+        request_dict.update({'Order Status': 'pending'})
+
+        # DynamoDB client
+        db_client = boto3.resource('dynamodb')
+        # get customer order table
+        table = db_client.Table(DB_TABLE)
 
         # store data into DynamoDB
-        table.put_item(item=request_dict)
+        table.put_item(Item=request_dict)
 
         # send request to Manager using Flask
-        requests.post(url='%s/customer_order' % MANAGER_ADDR, json=json.dumps(requests))
+        response = requests.post(url='http://%s:%s/customer_order' %
+                                 (MANAGER_ADDR, MANAGER_PRT), json=request_dict)
 
-        # listen response from Manager using MQTT
-        speech_text = self.mqtt_listener(request_dict['room'])
+        speech_text = response
 
         # set simple card for this request
         handler_input.response_builder.speak(speech_text).set_card(
@@ -154,8 +126,8 @@ class CancelAndStopIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         speech_text = "Goodbye!"
 
-        handler_input.response_builder.speak(speech_text).set_card(
-            SimpleCard(SKILL, speech_text))
+        handler_input.response_builder.speak(
+            speech_text).set_card(SimpleCard(SKILL, speech_text))
         return handler_input.response_builder.response
 
 
@@ -164,19 +136,18 @@ class AllExceptionHandler(AbstractExceptionHandler):
         return True
 
     def handle(self, handler_input, exception):
-        print(exception)
-
         speech = "Sorry, I didn't get it. Can you please say it again!!"
         handler_input.response_builder.speak(speech).ask(speech)
         return handler_input.response_builder.response
 
 
-sb = SkillBuilder()
-sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(CustomerOrderIntentHandler())
-sb.add_request_handler(HelpIntentHandler())
-sb.add_request_handler(CancelAndStopIntentHandler())
-sb.add_request_handler(SessionEndedRequestHandler())
-sb.add_exception_handler(AllExceptionHandler())
+def lambda_handler(event, context):
+    sb = SkillBuilder()
+    sb.add_request_handler(LaunchRequestHandler())
+    sb.add_request_handler(CustomerOrderIntentHandler())
+    sb.add_request_handler(HelpIntentHandler())
+    sb.add_request_handler(CancelAndStopIntentHandler())
+    sb.add_request_handler(SessionEndedRequestHandler())
+    sb.add_exception_handler(AllExceptionHandler())
 
-handler = sb.lambda_handler()
+    sb.lambda_handler()
