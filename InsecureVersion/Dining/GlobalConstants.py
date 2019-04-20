@@ -8,6 +8,7 @@ HELP_TEXT = "This is the help text."
 FD_TOPIC = 'CustomerOrder'
 ORDER_STATUS = 'OrderStatus'
 
+
 # ##############################
 # Communication Layer Constants
 MQTT_ADDR = 'ec2-18-236-133-26.us-west-2.compute.amazonaws.com'

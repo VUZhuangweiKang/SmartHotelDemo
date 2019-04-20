@@ -17,15 +17,15 @@
 #
 #
 
-import boto3
 import time
+import json
 from paho.mqtt.client import Client
-from flask import Flask, request
 from GlobalConstants import *
 
 
 Client.connected_flag = False
-mqtt_client = Client()
+mqtt_client = Client('1')
+
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -33,9 +33,11 @@ def on_connect(client, userdata, flags, rc):
     else:
         mqtt_client.connected_flag = False
 
+
 def on_message(client, userdata, message):
-    print('Recived Order: %s '% message.payload)
-    client.publish(topic=ORDER_STATUS, payload='Foods is preparing')
+    print('Recived Order: %s ' % message.payload)
+    client.publish(topic='%s/%s' % (ORDER_STATUS, message.topic.split('/')[1]), payload='Foods is preparing')
+
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
@@ -43,4 +45,7 @@ mqtt_client.loop_start()
 mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
 while not mqtt_client.connected_flag:  # wait in loop
     print("In wait loop")
+    time.sleep(1)
 mqtt_client.subscribe(topic='%s/*' % FD_TOPIC, qos=1)
+mqtt_client.loop_forever()
+mqtt_client.disconnect()

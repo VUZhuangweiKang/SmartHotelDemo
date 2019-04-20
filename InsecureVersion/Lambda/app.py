@@ -56,7 +56,6 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         return is_intent_name("CustomerOrder")(handler_input)
 
     def handle(self, handler_input):
-        global got_response
         # get slots values
         request_dict = self.parse_request(handler_input)
 
