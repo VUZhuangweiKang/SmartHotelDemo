@@ -36,8 +36,8 @@ from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
-from GlobalConstants import *
-from MessageSecure import *
+from SecureVersion.GlobalConstants import *
+from SecureVersion.FlaskSSLSecure import *
 
 
 # Customer order processing logic
