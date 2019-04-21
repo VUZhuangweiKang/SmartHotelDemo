@@ -34,7 +34,7 @@ elif [ $1='manager' ]; then
     # Install python libraries using pip
     echo -e "The following libraries will be installed: \n paho-mqtt \n Flask \n boto3 \n string \n pycryptodome"
 
-    pip3 install paho-mqtt Flask boto3 pycryptodome
+    pip3 install paho-mqtt Flask boto3 pycryptodome simplejson
 
     # Install aws cli
     echo "Start install aws cli..."

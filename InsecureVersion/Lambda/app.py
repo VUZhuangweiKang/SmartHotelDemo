@@ -60,19 +60,16 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         report = {}
         report.update({
             'value1': Decimal(receipt['Room']),
-            'value2': receipt['Foods'],
-            'value3': receipt['Size']
+            'value2': '%s %s' % (receipt['Size'], receipt['Foods']),
+            'value3': '$%s' % receipt['Price']
         })
         requests.post(
-            "https://maker.ifttt.com/trigger/marriott_customer_receipt/gAkmSjkMudDSkfD6ptC6xZ-xujTyBfFH--xoCtaQWMw", data=report)
-
+            "https://maker.ifttt.com/trigger/marriott_customer_receipt/with/key/gAkmSjkMudDSkfD6ptC6xZ-xujTyBfFH--xoCtaQWMw", data=report)
 
     def handle(self, handler_input):
-        global got_response
         # get slots values
         request_dict = self.parse_request(handler_input)
-        request_dict['Room'] = Decimal(request_dict['Room'])
-        
+
         # add order status (key, value) pair
         request_dict.update({'Order Status': 'pending'})
 
@@ -89,10 +86,12 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
                                  (MANAGER_ADDR, MANAGER_PRT), json=request_dict)
 
         response_info = simplejson.loads(response.text)
+        response_info['Room'] = Decimal(response_info['Room'])
+
         if response_info['Order Status'] == 'Confirmed':
             speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
             # triger IFTTT
-            self.email_receipt(simplejson.loads(response.text))
+            self.email_receipt(response_info)
         else:
             speech_text = 'Your order is processing, we will notify you when your order is accepted. Thanks for your patience.'
 
@@ -155,6 +154,7 @@ class AllExceptionHandler(AbstractExceptionHandler):
         return True
 
     def handle(self, handler_input, exception):
+        print(exception)
         speech = "Sorry, I didn't get it. Can you please say it again!!"
         handler_input.response_builder.speak(speech).ask(speech)
         return handler_input.response_builder.response
