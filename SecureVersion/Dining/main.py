@@ -46,6 +46,12 @@ def on_message(client, userdata, message):
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
+
+# set mosquitto broker password and username
+mqtt_client.username_pw_set(username=USERNAME, password=PASSWORD)
+# set TLS cert for the client
+# mqtt_client.tls_set(ca_certs=TLS_CERT)
+
 mqtt_client.loop_start()
 mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
 while not mqtt_client.connected_flag:  # wait in loop
