@@ -18,6 +18,7 @@
 #
 
 import time
+import json
 from paho.mqtt.client import Client
 from GlobalConstants import *
 
@@ -34,8 +35,9 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    print(payload)
-    client.publish(topic='%s/%s' % (ORDER_STATUS, message.topic.split('/')[1]), payload='Foods is preparing')
+    info = json.loads(message.payload)
+    info['Order Status'] = 'Confirmed'
+    client.publish(topic='%s/%s' % (ORDER_STATUS, info['Room']), payload=json.dumps(info))
 
 
 mqtt_client.on_connect = on_connect

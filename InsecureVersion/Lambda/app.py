@@ -55,7 +55,19 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("CustomerOrder")(handler_input)
 
+    def email_receipt(self, receipt):
+        report = {}
+        report.update({
+            'value1': receipt['Room'],
+            'value2': receipt['Foods'],
+            'value3': receipt['Size']
+        })
+        requests.post(
+            "https://maker.ifttt.com/trigger/marriott_customer_receipt/gAkmSjkMudDSkfD6ptC6xZ-xujTyBfFH--xoCtaQWMw", data=report)
+
+
     def handle(self, handler_input):
+        global got_response
         # get slots values
         request_dict = self.parse_request(handler_input)
         # add order status (key, value) pair
@@ -73,7 +85,13 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         response = requests.post(url='http://%s:%s/customer_order' %
                                  (MANAGER_ADDR, MANAGER_PRT), json=request_dict)
 
-        speech_text = response.text
+        response_info = json.loads(response.text)
+        if response_info['Order Status'] == 'Confirmed':
+            speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
+            # triger IFTTT
+            self.email_receipt(json.loads(response.text))
+        else:
+            speech_text = 'Your order is processing, we will notify you when your order is accepted. Thanks for your patience.'
 
         # set simple card for this request
         handler_input.response_builder.speak(speech_text).set_card(

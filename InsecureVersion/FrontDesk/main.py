@@ -33,7 +33,7 @@ dynamodb_resource = boto3.resource('dynamodb', region_name=REGION)
 
 mqtt_client = None
 order_status_flag = False
-order_status = None
+order_info = None
 app = Flask(__name__)
 
 
@@ -61,19 +61,10 @@ def init_price_table():
 
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    receipt = 'Customer Receipt\n' \
-              'Room: %s\n' \
-              'Food: %s\n' \
-              'Size: %s\n' \
-              'Price: %s\n' \
-              'Ordered Time: %s' % (body['Room'],
-                                    body['Foods'],
-                                    body['Size'],
-                                    body['Price'],
-                                    str(datetime.datetime.now()))
-    print(receipt)
+    body.update({'Order Time' : str(datetime.datetime.now())})
+    print(body)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    return receipt
+    return body
 
 
 def on_connect(client, userdata, flags, rc):
@@ -84,9 +75,9 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    global order_status, order_status_flag
+    global order_info, order_status_flag
     order_status_flag = True
-    order_status = message.payload
+    order_info = message.payload
 
 
 def mqtt_handler():
@@ -123,17 +114,16 @@ def handler():
 
     table.put_item(Item=json_body)
 
+    # print customer receipt
     receipt = print_receipt(json_body)
 
     # respond Lambda using MQTT
-    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=receipt)
+    mqtt_client.publish(topic='%s/%s' % (FD_TOPIC, json_body['Room']), payload=json.dumps(receipt))
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False
-    
-    print('Order Status:', order_status)
 
-    return order_status, 200
+    return order_info, 200
 
 
 if __name__ == '__main__':
