@@ -16,7 +16,7 @@ MQTT_PRT = 8883
 USERNAME = 'zhuangwei'
 PASSWORD = 'kzw123'
 
-TLS_CERT = '../ca.crt'
+TLS_CERT = 'ca.crt'
 
 # ######## Manager ############
 
