@@ -78,6 +78,9 @@ def on_message(client, userdata, message):
     global order_info, order_status_flag
     order_status_flag = True
     order_info = message.payload
+    # update order status in dynamodb
+    table = dynamodb_resource.Table(DB_TABLE)
+    table.put_item(Item=simplejson.loads(order_info))
 
 
 def mqtt_handler():
@@ -104,7 +107,7 @@ def handler():
     # use table
     table = dynamodb_resource.Table(DB_TABLE)
     # update order status
-    json_body['Order Status'] = 'Ordered'
+    json_body['Order Status'] = 'Processing'
 
     price_table = dynamodb_resource.Table(PRICE_TABLE)
 

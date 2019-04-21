@@ -71,7 +71,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         request_dict = self.parse_request(handler_input)
 
         # add order status (key, value) pair
-        request_dict.update({'Order Status': 'pending'})
+        request_dict.update({'Order Status': 'Received'})
 
         # DynamoDB client
         db_client = boto3.resource('dynamodb')
