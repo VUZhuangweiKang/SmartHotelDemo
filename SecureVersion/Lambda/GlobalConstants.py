@@ -23,7 +23,7 @@ TLS_CERT = 'ca.crt'
 MANAGER_ADDR = 'ec2-52-12-116-79.us-west-2.compute.amazonaws.com'
 MANAGER_PRT = '5000'
 
-MESSAGE_DECRYPT_KEY = 'kzw123'
+MESSAGE_DECRYPT_KEY = '123456789'
 
 # ##############################
 # DynamoDB Constants
