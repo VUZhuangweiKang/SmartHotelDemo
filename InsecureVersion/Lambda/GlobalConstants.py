@@ -5,7 +5,7 @@ HELP_TEXT = "Welcome to Marriott. You can ask me to order foods for you, we have
 
 # ##############################
 # Communication Layer Constants
-MANAGER_ADDR = 'ec2-34-218-241-64.us-west-2.compute.amazonaws.com'
+MANAGER_ADDR = 'ec2-54-188-117-8.us-west-2.compute.amazonaws.com'
 MANAGER_PRT = '5000'
 
 # ##############################
