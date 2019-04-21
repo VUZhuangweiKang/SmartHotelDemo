@@ -13,6 +13,7 @@ ORDER_STATUS = 'OrderStatus'
 # ############ MQTT ############
 MQTT_ADDR = 'ec2-52-12-116-79.us-west-2.compute.amazonaws.com'
 MQTT_PRT = 8883
+
 USERNAME = 'zhuangwei'
 PASSWORD = 'kzw123'
 
