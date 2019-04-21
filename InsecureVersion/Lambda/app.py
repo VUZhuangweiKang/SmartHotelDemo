@@ -27,8 +27,9 @@
 
 
 import boto3
-import json
 import requests
+import simplejson
+from decimal import Decimal
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
@@ -58,7 +59,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
     def email_receipt(self, receipt):
         report = {}
         report.update({
-            'value1': receipt['Room'],
+            'value1': Decimal(receipt['Room']),
             'value2': receipt['Foods'],
             'value3': receipt['Size']
         })
@@ -70,6 +71,8 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         global got_response
         # get slots values
         request_dict = self.parse_request(handler_input)
+        request_dict['Room'] = Decimal(request_dict['Room'])
+        
         # add order status (key, value) pair
         request_dict.update({'Order Status': 'pending'})
 
@@ -85,11 +88,11 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         response = requests.post(url='http://%s:%s/customer_order' %
                                  (MANAGER_ADDR, MANAGER_PRT), json=request_dict)
 
-        response_info = json.loads(response.text)
+        response_info = simplejson.loads(response.text)
         if response_info['Order Status'] == 'Confirmed':
             speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
             # triger IFTTT
-            self.email_receipt(json.loads(response.text))
+            self.email_receipt(simplejson.loads(response.text))
         else:
             speech_text = 'Your order is processing, we will notify you when your order is accepted. Thanks for your patience.'
 

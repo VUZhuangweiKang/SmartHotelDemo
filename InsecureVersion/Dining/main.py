@@ -18,7 +18,7 @@
 #
 
 import time
-import json
+import simplejson
 from paho.mqtt.client import Client
 from GlobalConstants import *
 
@@ -35,10 +35,10 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    info = json.loads(message.payload, use_decimal=True)
+    info = simplejson.loads(message.payload)
     info['Order Status'] = 'Confirmed'
     client.publish(topic='%s/%s' % (ORDER_STATUS,
-                                    info['Room']), payload=json.dumps(info, use_decimal=True))
+                                    info['Room']), payload=simplejson.dumps(info))
 
 
 mqtt_client.on_connect = on_connect
