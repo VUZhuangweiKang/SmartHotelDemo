@@ -35,9 +35,10 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    info = json.loads(message.payload)
+    info = json.loads(message.payload, use_decimal=True)
     info['Order Status'] = 'Confirmed'
-    client.publish(topic='%s/%s' % (ORDER_STATUS, info['Room']), payload=json.dumps(info))
+    client.publish(topic='%s/%s' % (ORDER_STATUS,
+                                    info['Room']), payload=json.dumps(info, use_decimal=True))
 
 
 mqtt_client.on_connect = on_connect
