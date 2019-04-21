@@ -10,10 +10,10 @@ ORDER_STATUS = 'OrderStatus'
 
 # ##############################
 # Communication Layer Constants
-MQTT_ADDR = 'ec2-18-236-133-26.us-west-2.compute.amazonaws.com'
+MQTT_ADDR = 'ec2-34-218-241-64.us-west-2.compute.amazonaws.com'
 MQTT_PRT = 1883
 
-MANAGER_ADDR = 'ec2-18-236-133-26.us-west-2.compute.amazonaws.com'
+MANAGER_ADDR = 'ec2-34-218-241-64.us-west-2.compute.amazonaws.com'
 MANAGER_PRT = '5000'
 
 # ##############################
