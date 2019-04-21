@@ -17,32 +17,40 @@
 #
 #
 
-import boto3
 import time
+import simplejson
 from paho.mqtt.client import Client
-from flask import Flask, request
 from GlobalConstants import *
-
-
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        client.connected_flag = True
-    else:
-        client.connected_flag = False
-
-
-def on_message(client, userdata, message):
-    print('Recived Order: %s '% message.payload)
+from MessageSecure import *
 
 
 Client.connected_flag = False
 mqtt_client = Client()
+
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        mqtt_client.connected_flag = True
+    else:
+        mqtt_client.connected_flag = False
+
+
+def on_message(client, userdata, message):
+    info = decrypt(MESSAGE_DECRYPT_KEY, simplejson.loads(message.payload))
+    print('Customer Order:')
+    info['Order Status'] = 'Confirmed'
+    print(info)
+    client.publish(topic='%s/%s' % (ORDER_STATUS,
+                                    info['Room']), payload=cipher(MESSAGE_DECRYPT_KEY, simplejson.dumps(info)))
+
+
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 mqtt_client.loop_start()
 mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)
 while not mqtt_client.connected_flag:  # wait in loop
     print("In wait loop")
-mqtt_client.subscribe(topic='%s/*' % FD_TOPIC, qos=1)
+    time.sleep(1)
+mqtt_client.subscribe(topic='%s/+' % FD_TOPIC)
 mqtt_client.loop_forever()
 mqtt_client.disconnect()

@@ -1,7 +1,7 @@
 # ##############################
 # Alexa related constants
 SKILL = 'Customer Order'
-HELP_TEXT = "This is the help text."
+HELP_TEXT = "Welcome to Marriott. You can ask me to order foods for you, we have pizza, buger and sandwich."
 
 # ##############################
 # Communication Layer Constants

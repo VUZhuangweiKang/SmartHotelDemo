@@ -20,14 +20,14 @@
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import time
-import json
+import simplejson
 import datetime
 from threading import Thread
 from paho.mqtt.client import Client
 from flask import Flask, request
 from GlobalConstants import *
 from MessageSecure import *
-from .FlaskSSLSecure import *
+from FlaskSSLSecure import *
 
 # The boto3 dynamoDB resource
 dynamodb_resource = boto3.resource('dynamodb')
@@ -63,19 +63,10 @@ def init_price_table():
 
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    receipt = 'Customer Receipt\n' \
-              'Room: %s\n' \
-              'Food: %s\n' \
-              'Size: %s\n' \
-              'Price: %s\n' \
-              'Ordered Time: %s' % (body['Room'],
-                                    body['Foods'],
-                                    body['Size'],
-                                    body['Price'],
-                                    str(datetime.datetime.now()))
-    print(receipt)
+    body.update({'Order Time': str(datetime.datetime.now())})
+    print(body)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    return receipt
+    return body
 
 
 def on_connect(client, userdata, flags, rc):
@@ -89,20 +80,24 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    global order_status, order_status_flag
+    global order_info, order_status_flag
     order_status_flag = True
-    # TODO: decrypt message here
-    order_status = message.payload
+    order_info = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
+    # update order status in dynamodb
+    table = dynamodb_resource.Table(DB_TABLE)
+    table.put_item(Item=simplejson.loads(order_info))
 
 
 def mqtt_handler():
     global mqtt_client
     Client.connected_flag = False
     mqtt_client = Client()
+
      # set mosquitto broker password and username
     mqtt_client.username_pw_set(username=USERNAME, password=PASSWORD)
     # set TLS cert for the client
     mqtt_client.tls_set(ca_certs=TLS_CERT)
+    
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
     mqtt_client.loop_start()
@@ -121,13 +116,12 @@ def handler():
     global order_status_flag
     json_body = request.get_data()
 
-    json_body = json.loads(decrypt(key=MESSAGE_DECRYPT_KEY, data=json_body))
+    json_body = simplejson.loads(decrypt(key=MESSAGE_DECRYPT_KEY, data=json_body))
 
     # use table
     table = dynamodb_resource.Table(DB_TABLE)
-
     # update order status
-    json_body['Order Status'] = 'Ordered'
+    json_body['Order Status'] = 'Processing'
 
     price_table = dynamodb_resource.Table(PRICE_TABLE)
 
@@ -137,17 +131,18 @@ def handler():
 
     table.put_item(Item=json_body)
 
+    # print customer receipt
     receipt = print_receipt(json_body)
 
     # respond Lambda using MQTT, payload is encrypted
-    encrypted_payload = cipher(key=MESSAGE_DECRYPT_KEY, data=receipt)
+    encrypted_payload = cipher(
+        key=MESSAGE_DECRYPT_KEY, data=simplejson.dumps(receipt))
     mqtt_client.publish(topic='%s/%s' %
                         (FD_TOPIC, json_body['Room']), payload=encrypted_payload)
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False
 
-    print('Order Status:', order_status)
     return order_status, 200
 
 
@@ -155,4 +150,4 @@ if __name__ == '__main__':
     init_price_table()
     mqtt_thr = Thread(target=mqtt_handler, daemon=True)
     mqtt_thr.start()
-    app.run(host=MANAGER_ADDR, port=MANAGER_PRT, debug=True)
+    app.run(host=MANAGER_ADDR, port=MANAGER_PRT, debug=True, ssl_context=context)

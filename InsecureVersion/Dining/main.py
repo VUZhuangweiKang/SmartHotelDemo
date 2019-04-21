@@ -24,7 +24,7 @@ from GlobalConstants import *
 
 
 Client.connected_flag = False
-mqtt_client = Client('1')
+mqtt_client = Client()
 
 
 def on_connect(client, userdata, flags, rc):
@@ -37,8 +37,8 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, message):
     info = simplejson.loads(message.payload)
     print('Customer Order:')
-    print(info)
     info['Order Status'] = 'Confirmed'
+    print(info)
     client.publish(topic='%s/%s' % (ORDER_STATUS,
                                     info['Room']), payload=simplejson.dumps(info))
 
