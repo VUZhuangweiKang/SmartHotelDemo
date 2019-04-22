@@ -30,7 +30,7 @@ from MessageSecure import *
 from FlaskSSLSecure import *
 
 # The boto3 dynamoDB resource
-dynamodb_resource = boto3.resource('dynamodb')
+dynamodb_resource = boto3.resource('dynamodb', region_name=REGION)
 
 mqtt_client = None
 order_status_flag = False
@@ -81,8 +81,8 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, message):
     global order_info, order_status_flag
-    order_status_flag = True
     order_info = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
+    order_status_flag = True
     # update order status in dynamodb
     table = dynamodb_resource.Table(DB_TABLE)
     table.put_item(Item=simplejson.loads(order_info))
@@ -140,7 +140,6 @@ def handler():
     mqtt_client.publish(topic='%s/%s' %
                         (FD_TOPIC, json_body['Room']), payload=encrypted_payload)
     while not order_status_flag:
-        print('waiting status change')
         time.sleep(1)
     order_status_flag = False
 

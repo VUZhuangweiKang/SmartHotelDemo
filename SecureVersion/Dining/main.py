@@ -31,6 +31,9 @@ mqtt_client = Client()
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         mqtt_client.connected_flag = True
+    elif rc == 5:
+        print('Connection refused.')
+        mqtt_client.connected_flag = False
     else:
         mqtt_client.connected_flag = False
 
