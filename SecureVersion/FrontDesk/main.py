@@ -80,12 +80,12 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    global order_info, order_status_flag
-    order_info = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
+    global order_status, order_status_flag
+    order_status = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
     order_status_flag = True
     # update order status in dynamodb
     table = dynamodb_resource.Table(DB_TABLE)
-    table.put_item(Item=simplejson.loads(order_info))
+    table.put_item(Item=simplejson.loads(order_status))
 
 
 def mqtt_handler():
@@ -143,7 +143,7 @@ def handler():
         time.sleep(1)
     order_status_flag = False
 
-    return order_status, 200
+    return cipher(MESSAGE_DECRYPT_KEY, order_status), 200
 
 
 if __name__ == '__main__':
