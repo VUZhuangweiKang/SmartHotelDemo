@@ -140,6 +140,7 @@ def handler():
     mqtt_client.publish(topic='%s/%s' %
                         (FD_TOPIC, json_body['Room']), payload=encrypted_payload)
     while not order_status_flag:
+        print('waiting status change')
         time.sleep(1)
     order_status_flag = False
 
