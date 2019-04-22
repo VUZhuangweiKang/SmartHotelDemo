@@ -39,7 +39,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    info = decrypt(MESSAGE_DECRYPT_KEY, simplejson.loads(message.payload))
+    info = simplejson.loads(decrypt(MESSAGE_DECRYPT_KEY, message.payload))
     print('Customer Order:')
     info['Order Status'] = 'Confirmed'
     print(info)

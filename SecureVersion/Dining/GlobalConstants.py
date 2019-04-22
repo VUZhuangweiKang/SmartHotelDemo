@@ -1,7 +1,7 @@
 # ##############################
 # Alexa related constants
 SKILL = 'Customer Order'
-HELP_TEXT = "Welcome to Marriott. You can ask me to order foods for you, we have pizza, buger and sandwich."
+HELP_TEXT = "Welcome to Marriott. You can ask me to order foods for you, we have pizza, burger and sandwich."
 
 # ##############################
 # AWS Lambda related constants
@@ -13,6 +13,7 @@ ORDER_STATUS = 'OrderStatus'
 # ############ MQTT ############
 MQTT_ADDR = 'ec2-54-186-232-48.us-west-2.compute.amazonaws.com'
 MQTT_PRT = 8883
+
 USERNAME = 'zhuangwei'
 PASSWORD = 'kzw123'
 
