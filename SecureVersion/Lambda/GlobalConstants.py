@@ -11,7 +11,7 @@ ORDER_STATUS = 'OrderStatus'
 # ##############################
 # Communication Layer Constants
 # ############ MQTT ############
-MQTT_ADDR = 'ec2-52-12-116-79.us-west-2.compute.amazonaws.com'
+MQTT_ADDR = 'ec2-54-186-232-48.us-west-2.compute.amazonaws.com'
 MQTT_PRT = 8883
 USERNAME = 'zhuangwei'
 PASSWORD = 'kzw123'
@@ -20,7 +20,7 @@ TLS_CERT = 'ca.crt'
 
 # ######## Manager ############
 
-MANAGER_ADDR = 'ec2-52-12-116-79.us-west-2.compute.amazonaws.com'
+MANAGER_ADDR = 'ec2-54-186-232-48.us-west-2.compute.amazonaws.com'
 MANAGER_PRT = '5000'
 
 MESSAGE_DECRYPT_KEY = '123456789'

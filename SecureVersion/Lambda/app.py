@@ -38,7 +38,6 @@ from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
 from MessageSecure import *
 from GlobalConstants import *
-from FlaskSSLSecure import *
 
 
 # Customer order processing logic
@@ -88,10 +87,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
 
         with open('api.key', 'r') as apikey:
             key = apikey.read().replace('\n', '')
-        http_headers = {
-            "Content-Type" : "application/json",
-            "x-api-key" : key
-        }
+        http_headers = {"x-api-key" : key}
         response = requests.post(url='https://%s:%s/customer_order' %
                                  (MANAGER_ADDR, MANAGER_PRT), headers=http_headers, data=encrypt_msg)
 

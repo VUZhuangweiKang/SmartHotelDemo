@@ -1,4 +1,4 @@
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from Cryptodome import Random
 from binascii import b2a_hex, a2b_hex, unhexlify
 import random
