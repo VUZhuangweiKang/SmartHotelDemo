@@ -53,7 +53,7 @@ mqtt_client.on_message = on_message
 # set mosquitto broker password and username
 mqtt_client.username_pw_set(username=USERNAME, password=PASSWORD)
 # set TLS cert for the client
-# mqtt_client.tls_set(ca_certs=TLS_CERT)
+mqtt_client.tls_set(ca_certs=TLS_CERT)
 
 mqtt_client.loop_start()
 mqtt_client.connect(host=MQTT_ADDR, port=MQTT_PRT)

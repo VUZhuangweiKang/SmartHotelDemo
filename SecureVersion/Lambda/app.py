@@ -87,11 +87,16 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
 
         with open('api.key', 'r') as apikey:
             key = apikey.read().replace('\n', '')
-        http_headers = {"x-api-key" : key}
-        response = requests.post(url='https://%s:%s/customer_order' %
-                                 (MANAGER_ADDR, MANAGER_PRT), headers=http_headers, data=encrypt_msg)
 
-        response_info = simplejson.loads(response.text)
+        http_headers = {
+            "x-api-key": key
+        }
+
+        response = requests.post(url='https://%s:%s/customer_order' %
+                                 (MANAGER_ADDR, MANAGER_PRT), headers=http_headers, data=encrypt_msg, verify=False)
+
+        response_info = simplejson.loads(
+            decrypt(MESSAGE_DECRYPT_KEY, response.text))
         response_info['Room'] = Decimal(response_info['Room'])
 
         if response_info['Order Status'] == 'Confirmed':
