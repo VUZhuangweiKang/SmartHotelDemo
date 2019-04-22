@@ -11,7 +11,7 @@ ORDER_STATUS = 'OrderStatus'
 # ##############################
 # Communication Layer Constants
 # ############ MQTT ############
-MQTT_ADDR = '54.186.232.48'
+MQTT_ADDR = '172.31.35.140'
 MQTT_PRT = 8883
 
 USERNAME = 'zhuangwei'
