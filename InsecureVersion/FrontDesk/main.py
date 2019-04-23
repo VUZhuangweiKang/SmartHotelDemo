@@ -33,25 +33,35 @@ app = Flask(__name__)
 
 
 def init_price_table():
-    foods_price = {
-        'pizza': {
-            'small': 10,
-            'medium': 20,
-            'large': 30
+    foods_price = [
+        {
+            'Foods': 'pizza',
+            'Price': {
+                'small': 10,
+                'medium': 20,
+                'large': 30
+            }
         },
-        'burger': {
-            'small': 10,
-            'medium': 20,
-            'large': 30
+        {
+            'Foods': 'burger',
+            'Price': {
+                'small': 5,
+                'medium': 10,
+                'large': 15
+            }
         },
-        'sandwich': {
-            'small': 10,
-            'medium': 20,
-            'large': 30
+        {
+            'Foods': 'sanwich',
+            'Price': {
+                'small': 7,
+                'medium': 9,
+                'large': 13
+            }
         }
-    }
+    ]
     price_table = dynamodb_resource.Table(PRICE_TABLE)
-    price_table.put_item(Item=foods_price)
+    for item in foods_price:
+        price_table.put_item(Item=item)
 
 # Print Cutomer Receipt
 def print_receipt(body):
