@@ -63,14 +63,13 @@ def init_price_table():
     for item in foods_price:
         price_table.put_item(Item=item)
 
-
 # Print Cutomer Receipt
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     print(body)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
   
-
+  
 # MQTT connect callback function
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -82,11 +81,9 @@ def on_connect(client, userdata, flags, rc):
 # MQTT callback function when receive messge
 def on_message(client, userdata, message):
     global order_info, order_status_flag
-    order_status_flag = True
-    order_info = message.payload
+    order_info = simplejson.loads(message.payload)
+
     # update order status in dynamodb
-    table = dynamodb_resource.Table(DB_TABLE)
-    order_info = simplejson.loads(order_info)
     table = dynamodb_resource.Table(DB_TABLE)
     table.update_item(
         Key={
@@ -95,10 +92,12 @@ def on_message(client, userdata, message):
         },
         UpdateExpression="set Order_Status = :os",
         ExpressionAttributeValues={
-            ':os': 'Processing'
+            ':os': order_info['Order_Status']
         },
         ReturnValues="UPDATED_NEW"
     )
+    order_info = simplejson.dumps(order_info)
+    order_status_flag = True
 
 
 def mqtt_handler():
