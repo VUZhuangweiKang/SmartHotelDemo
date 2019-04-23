@@ -74,8 +74,11 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         # get slots values
         request_dict = self.parse_request(handler_input)
 
-       # add order status (key, value) pair
-        request_dict.update({'Order Status': 'Received'})
+        # add order status (key, value) pair
+        request_dict.update({
+            'Order Time' : str(datetime.datetime.now()),
+            'Order_Status': 'Received'
+        })
 
         # DynamoDB client
         db_client = boto3.resource('dynamodb')
