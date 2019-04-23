@@ -86,7 +86,19 @@ def on_message(client, userdata, message):
     order_info = message.payload
     # update order status in dynamodb
     table = dynamodb_resource.Table(DB_TABLE)
-    table.put_item(Item=simplejson.loads(order_info))
+    order_info = simplejson.loads(order_info)
+    table = dynamodb_resource.Table(DB_TABLE)
+    table.update_item(
+        Key={
+            'Order Time': order_info['Order Time'],
+            'Room': order_info['Room']
+        },
+        UpdateExpression="set Order_Status = :os",
+        ExpressionAttributeValues={
+            ':os': 'Processing'
+        },
+        ReturnValues="UPDATED_NEW"
+    )
 
 
 def mqtt_handler():
