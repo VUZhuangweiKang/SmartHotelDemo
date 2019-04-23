@@ -63,12 +63,13 @@ def init_price_table():
     for item in foods_price:
         price_table.put_item(Item=item)
 
+
 # Print Cutomer Receipt
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     print(body)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    return body
+  
 
 # MQTT connect callback function
 def on_connect(client, userdata, flags, rc):
@@ -139,11 +140,11 @@ def handler():
     )
 
     # print customer receipt
-    receipt = print_receipt(json_body)
+    print_receipt(json_body)
 
     # publish order information to Dining
     mqtt_client.publish(topic='%s/%s' % (FD_TOPIC,
-                                         json_body['Room']), payload=simplejson.dumps(receipt))
+                                         json_body['Room']), payload=simplejson.dumps(json_body))
     
     # wait until received response from Dining
     while not order_status_flag:
