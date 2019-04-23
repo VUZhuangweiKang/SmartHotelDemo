@@ -66,6 +66,10 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         requests.post(
             "https://maker.ifttt.com/trigger/marriott_customer_receipt/with/key/gAkmSjkMudDSkfD6ptC6xZ-xujTyBfFH--xoCtaQWMw", data=report)
 
+    def turn_on_hue(self):
+        requests.get(
+            "https://maker.ifttt.com/trigger/marriott_hue/with/key/gAkmSjkMudDSkfD6ptC6xZ-xujTyBfFH--xoCtaQWMw")
+
     def handle(self, handler_input):
         # get slots values
         request_dict = self.parse_request(handler_input)
@@ -103,6 +107,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
             speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
             # triger IFTTT
             self.email_receipt(response_info)
+            self.turn_on_hue()
         else:
             speech_text = 'Your order is processing, we will notify you when your order is accepted. Thanks for your patience.'
 

@@ -96,6 +96,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
             speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
             # triger IFTTT
             self.email_receipt(response_info)
+            self.turn_on_hue()
         else:
             speech_text = 'Your order is processing, we will notify you when your order is accepted. Thanks for your patience.'
 
