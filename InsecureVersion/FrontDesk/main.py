@@ -51,8 +51,7 @@ def init_price_table():
         }
     }
     price_table = dynamodb_resource.Table(PRICE_TABLE)
-    for itemm in foods_price:
-        price_table.put_item(Item=itemm)
+    price_table.put_item(Item=foods_price)
 
 # Print Cutomer Receipt
 def print_receipt(body):
