@@ -33,53 +33,23 @@ app = Flask(__name__)
 
 
 def init_price_table():
-    foods_price = [
-        {
-            'Foods': 'pizza',
-            'Size': 'small',
-            'Price': 10
+    foods_price = {
+        'pizza': {
+            'small': 10,
+            'medium': 20,
+            'large': 30
         },
-        {
-            'Foods': 'pizza',
-            'Size': 'medium',
-            'Price': 20
+        'burger': {
+            'small': 10,
+            'medium': 20,
+            'large': 30
         },
-        {
-            'Foods': 'pizza',
-            'Size': 'large',
-            'Price': 30
-        },
-        {
-            'Foods': 'burger',
-            'Size': 'small',
-            'Price': 20
-        },
-        {
-            'Foods': 'burger',
-            'Size': 'medium',
-            'Price': 30
-        },
-        {
-            'Foods': 'burger',
-            'Size': 'large',
-            'Price': 40
-        },
-        {
-            'Foods': 'sandwich',
-            'Size': 'small',
-            'Price': 30
-        },
-        {
-            'Foods': 'sandwich',
-            'Size': 'medium',
-            'Price': 40
-        },
-        {
-            'Foods': 'sandwich',
-            'Size': 'large',
-            'Price': 50
+        'sandwich': {
+            'small': 10,
+            'medium': 20,
+            'large': 30
         }
-    ]
+    }
     price_table = dynamodb_resource.Table(PRICE_TABLE)
     for itemm in foods_price:
         price_table.put_item(Item=itemm)
@@ -145,6 +115,12 @@ def handler():
         'Price':price_table.scan(FilterExpression=Attr('Foods').eq(json_body['Foods']) & Attr('Size').eq(json_body['Size']))['Items'][0]['Price']
         })
 
+    table.update_item(
+        Key={
+            'Order Time': json_body['Order Time'],
+            'Room': json_body['Room']
+        }
+    )
     table.put_item(Item=json_body)
 
     # print customer receipt

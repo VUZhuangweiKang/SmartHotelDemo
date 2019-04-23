@@ -18,6 +18,7 @@
 
 import boto3
 import requests
+import datetime
 import simplejson
 from decimal import Decimal
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -65,7 +66,10 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         request_dict = self.parse_request(handler_input)
 
         # add order status (key, value) pair
-        request_dict.update({'Order Status': 'Received'})
+        request_dict.update({
+            'Order Status': 'Received',
+            'Order Time' : str(datetime.datetime.now())
+            })
 
         # DynamoDB client
         db_client = boto3.resource('dynamodb')
