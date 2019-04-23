@@ -89,7 +89,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, message):
     global order_info, order_status_flag
-    order_info = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
+    order_info = simplejson.loads(decrypt(MESSAGE_DECRYPT_KEY, message.payload))
     
     # update order status in dynamodb
     table = dynamodb_resource.Table(DB_TABLE)
