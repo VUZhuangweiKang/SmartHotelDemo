@@ -66,7 +66,6 @@ def init_price_table():
 # Print Cutomer Receipt
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    body.update({'Order Time' : str(datetime.datetime.now())})
     print(body)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     return body
