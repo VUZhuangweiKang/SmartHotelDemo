@@ -31,7 +31,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, message):
     info = simplejson.loads(message.payload)
     print('Customer Order:')
-    info['Order Status'] = 'Confirmed'
+    info['Order_Status'] = 'Confirmed'
     print(info)
     client.publish(topic='%s/%s' % (ORDER_STATUS,
                                     info['Room']), payload=simplejson.dumps(info))
