@@ -26,13 +26,40 @@ The scenario of this application is processing customer foods ordering request b
 - Python3
 - MQTT
 - Flask
+- AWS CLI
 
-## Key Techniques
-
-- Alexa Custom Skill
-
-    ![Alexa](./images/AlexaCustomSkill.png)
-
-- MQTT
-
-    ![mqtt](./images/mqtt.png)
+```bash
+# Firstly, follow slides in the following URL to setup your aws and required depedencies: 
+#
+# https://vanderbilt.box.com/s/q08pygoogobmqzgui1zc2o72kc6nce17 
+#
+# Now, you should have got into the en2 instance you just setup.
+# 
+# Clone the base repository
+$ git clone git@github.com:VUZhuangweiKang/MarriottAppDev.git
+# 
+# Install software depedencies for FrontDesk and Dining
+$ cd MarriottAppDev
+$ sudo chmod +x requirements.sh
+$ sudo su
+$ ./requirements.sh
+#
+# Configure your aws cli in the ec2 instance, this commond will prompt you to enter your aws access key and the secert access key you just saved.
+$ aws configure
+# 
+# Preparing lambda function zip file
+$ cd Lambda
+$ mkdir function & cd function
+# For insecure version
+$ pip3 install --upgrade ask_sdk_core ask_sdk_model requests simplejson --target .
+# For secure version
+$ pip3 install --upgrade ask_sdk_core ask_sdk_model requests simplejson pycryptodomex --target .
+#
+# copy the all other files in the Lambda directory into the function directory
+$ cd ../
+$ cp *.* ./function
+# zip the function directory
+$ zip -r9 function.zip function
+# upload the zip file to Lambda web console
+# speficy the handler field as: app.handler
+```

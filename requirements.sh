@@ -6,6 +6,9 @@
 echo "updating software repository..."
 sudo apt-get update
 
+# install zip
+sudo apt install -y zip
+
 if [ $1='broker' ]; then
     echo "starting preparing MQTT Broker server..."
     sudo apt-get install -y mosquitto
