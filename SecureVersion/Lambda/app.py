@@ -103,7 +103,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
             decrypt(MESSAGE_DECRYPT_KEY, response.text))
         response_info['Room'] = Decimal(response_info['Room'])
 
-        if response_info['Order Status'] == 'Confirmed':
+        if response_info['Order_Status'] == 'Confirmed':
             speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
             # triger IFTTT
             self.email_receipt(response_info)

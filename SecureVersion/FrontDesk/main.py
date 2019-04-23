@@ -34,7 +34,7 @@ dynamodb_resource = boto3.resource('dynamodb', region_name=REGION)
 
 mqtt_client = None
 order_status_flag = False
-order_status = None
+order_info = None
 app = Flask(__name__)
 
 
@@ -42,31 +42,39 @@ def init_price_table():
     foods_price = [
         {
             'Foods': 'pizza',
-            'Size': 'small',
-            'Price': 10
+            'Price': {
+                'small': 10,
+                'medium': 20,
+                'large': 30
+            }
         },
         {
             'Foods': 'burger',
-            'Size': 'small',
-            'Price': 20
+            'Price': {
+                'small': 5,
+                'medium': 10,
+                'large': 15
+            }
         },
         {
             'Foods': 'sandwich',
-            'Size': 'small',
-            'Price': 30
+            'Price': {
+                'small': 7,
+                'medium': 9,
+                'large': 13
+            }
         }
     ]
     price_table = dynamodb_resource.Table(PRICE_TABLE)
-    for itemm in foods_price:
-        price_table.put_item(Item=itemm)
+    for item in foods_price:
+        price_table.put_item(Item=item)
 
 
+# Print Cutomer Receipt
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    body.update({'Order Time': str(datetime.datetime.now())})
     print(body)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    return body
 
 
 def on_connect(client, userdata, flags, rc):
@@ -80,12 +88,24 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
-    global order_status, order_status_flag
-    order_status = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
-    order_status_flag = True
+    global order_info, order_status_flag
+    order_info = decrypt(MESSAGE_DECRYPT_KEY, message.payload)
+    
     # update order status in dynamodb
     table = dynamodb_resource.Table(DB_TABLE)
-    table.put_item(Item=simplejson.loads(order_status))
+    table.update_item(
+        Key={
+            'Order Time': order_info['Order Time'],
+            'Room': order_info['Room']
+        },
+        UpdateExpression="set Order_Status = :os",
+        ExpressionAttributeValues={
+            ':os': order_info['Order_Status']
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    order_info = simplejson.dumps(order_info)
+    order_status_flag = True
 
 
 def mqtt_handler():
@@ -122,29 +142,44 @@ def handler():
     # use table
     table = dynamodb_resource.Table(DB_TABLE)
     # update order status
-    json_body['Order Status'] = 'Processing'
+    json_body['Order_Status'] = 'Processing'
 
     price_table = dynamodb_resource.Table(PRICE_TABLE)
 
+    price = price_table.query(KeyConditionExpression=Key('Foods').eq(json_body['Foods']))['Items'][0]['Price'][json_body['Size']]
+
     json_body.update({
-        'Price': price_table.scan(FilterExpression=Attr('Foods').eq(json_body['Foods']) & Attr('Size').eq(json_body['Size']))['Items'][0]['Price']
+        'Price': price
     })
 
-    table.put_item(Item=json_body)
+    table.update_item(
+        Key={
+            'Order Time': json_body['Order Time'],
+            'Room': json_body['Room']
+        },
+        UpdateExpression="set Order_Status = :os, Price = :p",
+        ExpressionAttributeValues={
+            ':os': 'Processing',
+            ':p': price
+        },
+        ReturnValues="UPDATED_NEW"
+    )
 
     # print customer receipt
-    receipt = print_receipt(json_body)
+    print_receipt(json_body)
 
     # respond Lambda using MQTT, payload is encrypted
     encrypted_payload = cipher(
-        key=MESSAGE_DECRYPT_KEY, data=simplejson.dumps(receipt))
+        key=MESSAGE_DECRYPT_KEY, data=simplejson.dumps(json_body))
     mqtt_client.publish(topic='%s/%s' %
                         (FD_TOPIC, json_body['Room']), payload=encrypted_payload)
+    
+    # wait until received response from Dining
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False
 
-    return cipher(MESSAGE_DECRYPT_KEY, order_status), 200
+    return cipher(MESSAGE_DECRYPT_KEY, order_info), 200
 
 
 if __name__ == '__main__':
