@@ -120,7 +120,7 @@ def handler():
 
     price_table = dynamodb_resource.Table(PRICE_TABLE)
 
-    price = price_table.query(KeyConditionExpression=Key('Foods').eq(json_body['Foods']))['Items']['Price'][json_body['Size']]
+    price = price_table.query(KeyConditionExpression=Key('Foods').eq(json_body['Foods']))['Items'][0]['Price'][json_body['Size']]
 
     json_body.update({
         'Price': price
