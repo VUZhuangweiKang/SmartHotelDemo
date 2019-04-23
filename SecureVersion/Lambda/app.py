@@ -27,6 +27,7 @@
 
 import boto3
 import requests
+import datetime
 import simplejson
 from decimal import Decimal
 from ask_sdk_core.skill_builder import SkillBuilder
