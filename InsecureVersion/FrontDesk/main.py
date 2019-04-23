@@ -1,20 +1,15 @@
-# Sample code for Marriott Lecture
+# Insecure Version of Marriott Lecture Example Application
 # Vanderbilt University
 # Author: Marriott Lecture Group
 #
-# This file is for Manager in the architecture, whose responsibility is receiving
-# customer requests sent from Lambda Function.
+# This file is for FrontDesk in the architecture, whose responsibility is receiving
+# customer requests sent from Lambda Function, generating order receipt, and notify Dining.
 #
 #
 #   The scenario is pizza ordering through Alexa Echo
 #   Communication Manner:
-#       1. MQTT(Lambda listens responses from Manager): tcp://*.*.*.*:1883
-#       2. Flask(Manager listens requests from Lambda): https://*.*.*.*:5000
-#   Communication Security Issue:
-#       1. MQTT: using public MQTT server
-#       2. Flask: using http instead of https, no http header encryption
-#       3. No message encryption
-#
+#       1. MQTT(Communication between FrontDesk and Dining): tcp://*.*.*.*:1883
+#       2. Flask(Communication between Lambda and FrontDesk): http://*.*.*.*:5000
 #
 
 import boto3
@@ -45,20 +40,51 @@ def init_price_table():
             'Price': 10
         },
         {
+            'Foods': 'pizza',
+            'Size': 'medium',
+            'Price': 20
+        },
+        {
+            'Foods': 'pizza',
+            'Size': 'large',
+            'Price': 30
+        },
+        {
             'Foods': 'burger',
             'Size': 'small',
             'Price': 20
         },
         {
+            'Foods': 'burger',
+            'Size': 'medium',
+            'Price': 30
+        },
+        {
+            'Foods': 'burger',
+            'Size': 'large',
+            'Price': 40
+        },
+        {
             'Foods': 'sandwich',
             'Size': 'small',
             'Price': 30
+        },
+        {
+            'Foods': 'sandwich',
+            'Size': 'medium',
+            'Price': 40
+        },
+        {
+            'Foods': 'sandwich',
+            'Size': 'large',
+            'Price': 50
         }
     ]
     price_table = dynamodb_resource.Table(PRICE_TABLE)
     for itemm in foods_price:
         price_table.put_item(Item=itemm)
 
+# Print Cutomer Receipt
 def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     body.update({'Order Time' : str(datetime.datetime.now())})
@@ -66,7 +92,7 @@ def print_receipt(body):
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     return body
 
-
+# MQTT connect callback function
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         mqtt_client.connected_flag = True
@@ -74,6 +100,7 @@ def on_connect(client, userdata, flags, rc):
         mqtt_client.connected_flag = False
 
 
+# MQTT callback function when receive messge
 def on_message(client, userdata, message):
     global order_info, order_status_flag
     order_status_flag = True
@@ -94,11 +121,14 @@ def mqtt_handler():
     while not mqtt_client.connected_flag:  # wait in loop
         print("In wait loop")
         time.sleep(1)
+
+    # subscribe all rooms, using MQTT single layer wildcard
     mqtt_client.subscribe(topic='%s/+' % ORDER_STATUS)
     mqtt_client.loop_forever()
     mqtt_client.disconnect()
 
 
+# Define REST function
 @app.route('/customer_order', methods=['POST'])
 def handler():
     global order_status_flag
@@ -120,9 +150,11 @@ def handler():
     # print customer receipt
     receipt = print_receipt(json_body)
 
-    # respond Lambda using MQTT
+    # publish order information to Dining
     mqtt_client.publish(topic='%s/%s' % (FD_TOPIC,
                                          json_body['Room']), payload=simplejson.dumps(receipt))
+    
+    # wait until received response from Dining
     while not order_status_flag:
         time.sleep(1)
     order_status_flag = False

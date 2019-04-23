@@ -1,19 +1,13 @@
-# Sample code for Marriott Lecture
+# Insecure Version of Marriott Lecture Example Application
 # Vanderbilt University
 # Author: Marriott Lecture Group
 #
-# This file is for Manager in the architecture, whose responsibility is receiving
-# customer requests sent from Lambda Function.
-#
+# This file is for the Dining in the architecture, whose responsibility is verifying customer order
+# relayed from the FrontDesk by updating entries in DynamoDB.
 #
 #   The scenario is pizza ordering through Alexa Echo
 #   Communication Manner:
-#       1. MQTT(Lambda listens responses from Manager): tcp://*.*.*.*:1883
-#       2. Flask(Manager listens requests from Lambda): https://*.*.*.*:5000
-#   Communication Security Issue:
-#       1. MQTT: using public MQTT server
-#       2. Flask: using http instead of https, no http header encryption
-#       3. No message encryption
+#       1. MQTT(Communication between the FrontDesk and the Dining): tcp://*.*.*.*:1883
 #
 #
 
