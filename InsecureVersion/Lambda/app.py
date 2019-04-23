@@ -67,9 +67,9 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
 
         # add order status (key, value) pair
         request_dict.update({
-            'Order Status': 'Received',
-            'Order Time' : str(datetime.datetime.now())
-            })
+            'Order Time' : str(datetime.datetime.now()),
+            'Order_Status': 'Received'
+        })
 
         # DynamoDB client
         db_client = boto3.resource('dynamodb')
@@ -86,7 +86,7 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         response_info = simplejson.loads(response.text)
         response_info['Room'] = Decimal(response_info['Room'])
 
-        if response_info['Order Status'] == 'Confirmed':
+        if response_info['Order_Status'] == 'Confirmed':
             speech_text = 'Your order has been accepted, we are working on your foods. Please check your email to see your receipt. Thanks for you order.'
             # triger IFTTT
             self.email_receipt(response_info)

@@ -116,21 +116,28 @@ def handler():
     # use table
     table = dynamodb_resource.Table(DB_TABLE)
     # update order status
-    json_body['Order Status'] = 'Processing'
+    json_body['Order_Status'] = 'Processing'
 
     price_table = dynamodb_resource.Table(PRICE_TABLE)
 
+    price = price_table.query(KeyConditionExpression=Key('Foods').eq(json_body['Foods']))['Items']['Price'][json_body['Size']]
+
     json_body.update({
-        'Price':price_table.scan(FilterExpression=Attr('Foods').eq(json_body['Foods']) & Attr('Size').eq(json_body['Size']))['Items'][0]['Price']
-        })
+        'Price': price
+    })
 
     table.update_item(
         Key={
             'Order Time': json_body['Order Time'],
             'Room': json_body['Room']
-        }
+        },
+        UpdateExpression="set Order_Status = :os, Price = :p",
+        ExpressionAttributeValues={
+            ':os': 'Processing',
+            ':p': price
+        },
+        ReturnValues="UPDATED_NEW"
     )
-    table.put_item(Item=json_body)
 
     # print customer receipt
     receipt = print_receipt(json_body)
