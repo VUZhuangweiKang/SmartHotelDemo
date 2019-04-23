@@ -1,20 +1,26 @@
-# Sample code for Marriott Lecture
+# Secure Version of Marriott Lecture Example Application
 # Vanderbilt University
 # Author: Marriott Lecture Group
 #
-# This file is for Secure Version of Manager in the architecture, whose responsibility is receiving
-# customer requests sent from Lambda Function.
+# This file is for FrontDesk in the architecture, whose responsibility is receiving
+# customer requests sent from Lambda Function, generating order receipt, and notify Dining.
 #
 #
-#   The scenario is pizza ordering through Alexa Echo
-#   Communication Manner:
-#       1. MQTT(Lambda listens responses from Manager): tcp://*.*.*.*:1883
-#       2. Flask(Manager listens requests from Lambda): https://*.*.*.*:6000
-#   Communication Security Issue:
-#       1. MQTT: using public MQTT server with username & password access control and TLS encrypted connection and AES
-#               message encryption
-#       2. Flask: using https instead, with http header encryption
-#       3. Included message encryption
+# The scenario is pizza ordering through Alexa Echo
+# Communication Manner:
+#   1. MQTT(Communication between FrontDesk and Dining): tcp://*.*.*.*:8883
+#   2. Flask(Communication between Lambda and FrontDesk): https://*.*.*.*:5000
+# 
+# Security Measures:
+#   - MQTT:
+#       1. Username and password asscess
+#       2. TLS certificate
+#   - Flask:
+#       1. HTTPS enabled by setting ssl context
+#       2. API-key required while accepting requests
+#   - Message:
+#       1. Messages are encrypted using AES
+#
 #
 
 import boto3

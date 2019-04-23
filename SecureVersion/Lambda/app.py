@@ -1,29 +1,22 @@
-# Sample code for Marriott Lecture
+# Insecure Version of Marriott Lecture Example Application
 # Vanderbilt University
 # Author: Marriott Lecture Group
 #
 #
-# Codes in this file should be placed in a AWS Lambda function
-# to handle incoming requests from AVS and return a response.
-# Before returning a response, the handler should relay request
-# information to Manager and store data into DynamoDB.
+# Responsibilities of this Lambda Function:
+#   1. Handler of Alexa Custom Skill
+#   2. Replay requests to FrontDesk
+#   3. Initial requests records in DynamoDB
+#   4. Receive response from FrontDesk and trigger IFTTT email and Hue lamp
 #
+#   
+# Communication Manner:
+#   HTTPS POST: https://*.*.*.*:5000/customer_order
 #
-#   The scenario is pizza ordering through Alexa Echo
-#   Communication Manner:
-#       1. MQTT(Lambda listens responses from Manager): tcp://*.*.*.*:1883
-#       2. Flask(Manager listens requests from Lambda): https://*.*.*.*:6000
-#   Communication Security Issue:
-#       1. MQTT: using public MQTT server
-#       2. Flask: using http instead of https, with http header encryption
-#       3. Include message encryption
-#   Alexa handler is implemented using handler classes involved by the Alexa skill kit SDK(ask-sdk).
-#
-#
-#   Expect Echo output: "Your pizza has been ordered, and please check
-#   your email to see your receipt."
-#
-#
+# Security Measures:
+#   1. Cipher messages posted by Lambda function using AES
+#   2. HTTPS POST with x-api-key in http header
+
 
 import boto3
 import requests
@@ -89,7 +82,6 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         # store data into DynamoDB
         table.put_item(Item=request_dict)
 
-        # send request to Manager using Flask
         encrypt_msg = cipher(key=MESSAGE_DECRYPT_KEY,
                              data=simplejson.dumps(request_dict))
 
@@ -99,7 +91,8 @@ class CustomerOrderIntentHandler(AbstractRequestHandler):
         http_headers = {
             "x-api-key": key
         }
-
+        
+        # post requests to the FrontDesk
         response = requests.post(url='https://%s:%s/customer_order' %
                                  (MANAGER_ADDR, MANAGER_PRT), headers=http_headers, data=encrypt_msg, verify=False)
 

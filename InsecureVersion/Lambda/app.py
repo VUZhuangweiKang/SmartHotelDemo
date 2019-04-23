@@ -11,7 +11,7 @@
 #
 #   
 # Communication Manner:
-#   Http POST: http://*.*.*.*:5000/customer_order
+#   HTTP POST: http://*.*.*.*:5000/customer_order
 #
 #
 
